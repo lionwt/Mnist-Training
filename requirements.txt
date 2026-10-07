@@ -1,0 +1,5 @@
+torch==2.4.1
+torchvision==0.19.1
+torch-directml==0.2.5.dev240914
+matplotlib==3.10.6
+numpy==2.2.6
