@@ -1,13 +1,9 @@
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-
 import tkinter as tk
 import torch
 from PIL import Image, ImageDraw, ImageTk
 from torchvision import transforms
 from util.device import get_device
-from Deeplearning.model import NeuralNetwork
+from model import NeuralNetwork, ConvolutionalNeuralNetwork
 
 
 # -------------------------
@@ -15,9 +11,10 @@ from Deeplearning.model import NeuralNetwork
 # -------------------------
 device = get_device()
 
-model = NeuralNetwork().to(device)
+# model = NeuralNetwork().to(device)
+model = ConvolutionalNeuralNetwork().to(device)
 model.load_state_dict(
-  torch.load("model.pth", map_location="cpu", weights_only=False)
+  torch.load("./model.pth", map_location="cpu", weights_only=False)
 )
 model.to(device)
 

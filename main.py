@@ -1,15 +1,10 @@
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-
 import time
 import torch
 import torch.nn as nn
-import numpy as np
 from torch.utils.data import DataLoader
 from data.prepair import train_data, test_data
-from Deeplearning.model import NeuralNetwork
-from Deeplearning.eval import evaluate
+from model import NeuralNetwork, ConvolutionalNeuralNetwork
+from eval import evaluate
 from util.device import get_device
 
 train_loader = DataLoader(
@@ -25,7 +20,14 @@ test_loader = DataLoader(
 )
 
 device = get_device()
-model = NeuralNetwork().to(device)
+# model = NeuralNetwork().to(device)
+
+# model.load_state_dict(
+#   torch.load("./model.pth", map_location="cpu", weights_only=False)
+# )
+# model.to(device)
+
+model = ConvolutionalNeuralNetwork().to(device)
 
 # model.load_state_dict(
 #   torch.load("./model.pth", map_location="cpu", weights_only=False)
@@ -35,7 +37,7 @@ model = NeuralNetwork().to(device)
 loss_fn = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-epochs = 15
+epochs = 5
 
 for epoch in range(epochs):
   total_loss = 0
@@ -58,5 +60,8 @@ for epoch in range(epochs):
 
 torch.save({k: v.detach().cpu() for k, v in model.state_dict().items()}, "model.pth")
 
+acc, losses = evaluate(model, test_loader, device)
 
-print(f"Accuracy: {evaluate(model, test_loader, device):.4f}")
+print(f"Accuracy: {acc:.4f}")
+for i in range(len(losses)):
+  print(f"Test Loss {i+1}: {losses[i]:.4f}")
