@@ -1,10 +1,11 @@
 import tkinter as tk
+
 import torch
 from PIL import Image, ImageDraw, ImageTk
 from torchvision import transforms
-from util.device import get_device
-from model import NeuralNetwork, ConvolutionalNeuralNetwork
 
+from model import ConvolutionalNeuralNetwork
+from util.device import get_device
 
 # -------------------------
 # Load model
